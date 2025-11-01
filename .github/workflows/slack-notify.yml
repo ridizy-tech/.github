@@ -21,11 +21,11 @@ on:
 
 jobs:
   notify:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Load env file
         run: |
-          sudo grep -v '^#' /root/.env >> $GITHUB_ENV
+            grep -v '^#' $HOME/.env >> $GITHUB_ENV
       - name: Send Slack Notification
         uses: slackapi/slack-github-action@v1.27.0
         with:
