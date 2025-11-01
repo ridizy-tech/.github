@@ -10,8 +10,9 @@ on:
         type: string
       job_name:
         description: 'Name of the job'
-        required: true
+        required: false
         type: string
+        default: ''
       message:
         description: 'Custom message'
         required: false
@@ -33,7 +34,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ inputs.status == 'failure' && '🚨 *Job Failed*' || '✅ *Job Successful*' }}\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}\n*Job:* ${{ inputs.job_name }}${{ inputs.message != '' && format('\n*Message:* {0}', inputs.message) || '' }}"
+                    "text": "${{ inputs.status == 'failure' && '🚨 *Job Failed*' || '✅ *Job Successful*' }}\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}\n${{ inputs.job_name }}${{ inputs.message != '' && format('\n*Message:* {0}', inputs.message) || '' }}"
                   }
                 },
                 {
