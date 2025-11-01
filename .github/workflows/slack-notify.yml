@@ -23,6 +23,9 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Load env file
+        run: |
+          grep -v '^#' /runner/runner.env >> $GITHUB_ENV
       - name: Send Slack Notification
         uses: slackapi/slack-github-action@v1.27.0
         with:
@@ -61,4 +64,4 @@ jobs:
               ]
             }
         env:
-          SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
