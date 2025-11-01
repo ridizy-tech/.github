@@ -24,8 +24,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Load env file
-        run: |
-            grep -v '^#' $HOME/.env >> $GITHUB_ENV
+        run: grep -v '^#' $HOME/.env >> $GITHUB_ENV
       - name: Send Slack Notification
         uses: slackapi/slack-github-action@v1.27.0
         with:
