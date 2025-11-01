@@ -30,13 +30,13 @@ jobs:
         with:
           payload: |
             {
-              "text": "${{ inputs.status == 'failure' && '🚨' || '✅' }} *${{ inputs.job_name }}* - ${{ github.repository }}",
+              "text": "<!channel> ${{ inputs.status == 'failure' && '🚨' || '✅' }} *${{ inputs.job_name }}* - ${{ github.repository }}",
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ inputs.status == 'failure' && '🚨 *Job Failed*' || '✅ *Job Successful*' }}\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}\n${{ inputs.job_name }}${{ inputs.message != '' && format('\n*Message:* {0}', inputs.message) || '' }}"
+                    "text": "<!channel> ${{ inputs.status == 'failure' && '🚨 *Job Failed*' || '✅ *Job Successful*' }}\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Commit:* `${{ github.sha }}`\n*Author:* ${{ github.actor }}${{ inputs.job_name != '' && format('\n*Job:* {0}', inputs.job_name) || '' }}${{ inputs.message != '' && format('\n*Message:* {0}', inputs.message) || '' }}"
                   }
                 },
                 {
