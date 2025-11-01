@@ -1,0 +1,63 @@
+# .github/workflows/slack-notify.yml in ridizy-tech/.github repo
+name: Slack Notification
+
+on:
+  workflow_call:
+    inputs:
+      status:
+        description: 'Job status (success/failure)'
+        required: true
+        type: string
+      job_name:
+        description: 'Name of the job'
+        required: true
+        type: string
+      message:
+        description: 'Custom message'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack Notification
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "text": "${{ inputs.status == 'failure' && '🚨' || '✅' }} *${{ inputs.job_name }}* - ${{ github.repository }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ inputs.status == 'failure' && '🚨 *Job Failed*' || '✅ *Job Successful*' }}\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}\n*Job:* ${{ inputs.job_name }}${{ inputs.message != '' && format('\n*Message:* {0}', inputs.message) || '' }}"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Workflow Run"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Commit"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
