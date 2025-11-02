@@ -10,9 +10,8 @@ on:
         type: string
       job_name:
         description: 'Name of the job'
-        required: false
+        required: true
         type: string
-        default: ''
       message:
         description: 'Custom message'
         required: false
@@ -30,37 +29,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "<!channel> ${{ inputs.status == 'failure' && '🚨' || '✅' }} *${{ inputs.job_name }}* - ${{ github.repository }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<!channel> ${{ inputs.status == 'failure' && '🚨 *Job Failed*' || '✅ *Job Successful*' }}\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Commit:* `${{ github.sha }}`\n*Author:* ${{ github.actor }}${{ inputs.job_name != '' && format('\n*Job:* {0}', inputs.job_name) || '' }}${{ inputs.message != '' && format('\n*Message:* {0}', inputs.message) || '' }}"
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Workflow Run"
-                      },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Commit"
-                      },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
-                    }
-                  ]
-                }
-              ]
+              "text": "${{ inputs.status == 'failure' && '<!channel> 🚨' || '✅' }} *${{ inputs.job_name }}* - ${{ github.repository }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
